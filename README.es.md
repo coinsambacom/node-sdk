@@ -1,19 +1,19 @@
 🌎 [English](README.md) | 🌎 [Português](README.pt.md) | 🌎 [Español](README.es.md)
 
-# @coinsamba/coinsamba-api
+# @coinsamba/coinsamba-node-sdk
 
 Una biblioteca de Node.js para interactuar con la API de Coinsamba, que proporciona acceso a datos de criptomonedas e información sobre intercambios.
 
 ## Instalación
 
 ```shell
-npm install @coinsamba/coinsamba-api
+npm install @coinsamba/coinsamba-node-sdk
 ```
 
 ## Uso
 
 ```javascript
-const { Coinsamba } = require('@coinsamba/coinsamba-api');
+const { Coinsamba } = require('@coinsamba/coinsamba-node-sdk');
 
 // Crea una instancia de la API de Coinsamba
 const coinsamba = new Coinsamba({ isDev: true });
