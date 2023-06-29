@@ -1,12 +1,56 @@
 {
-  "name": "coinsamba-node-sdk",
-  "version": "1.0.0",
-  "main": "./src/index.js",
-  "repository": "https://github.com/coinsambadotcom/coinsamba-node-sdk.git",
-  "author": "Gustavo <gustavo@obex.pw>",
+  "version": "0.1.0",
   "license": "MIT",
-  "dependencies": {
-    "axios": "^0.19.2",
-    "esm": "^3.2.25"
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
+  },
+  "peerDependencies": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "name": "pkg",
+  "author": "Gustavo",
+  "module": "dist/pkg.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/pkg.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/pkg.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^8.2.6",
+    "@types/axios": "^0.14.0",
+    "husky": "^8.0.3",
+    "size-limit": "^8.2.6",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.6.0",
+    "typescript": "^5.1.6"
   }
 }
