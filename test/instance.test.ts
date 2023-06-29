@@ -1,4 +1,4 @@
-import { Coinsamba, CoinsambaOptions } from '../dist/index';
+import { Coinsamba, CoinsambaOptions } from '../src/index';
 
 describe('Coinsamba', () => {
   test('should create an instance of Coinsamba', () => {

@@ -1,3 +1,5 @@
+import got, { Got } from 'got';
+
 /**
  * Represents ticker data for a cryptocurrency pair.
  */
@@ -45,14 +47,17 @@ export interface CoinsambaOptions {
  */
 export class Coinsamba {
   private isDev: boolean;
-  private baseURL: string;
+  private api: Got;
 
   /**
    * Creates an instance of the Coinsamba API client.
    * @param options - Configuration options for the Coinsamba API instance.
    */
   constructor(options: CoinsambaOptions = {}) {
-    this.baseURL = 'https://api.coinsamba.com/v1';
+    this.api = got.extend({
+      prefixUrl: 'https://api.coinsamba.com/v1',
+      responseType: 'json',
+    });
     this.isDev = options.isDev ?? false;
   }
 
@@ -60,12 +65,6 @@ export class Coinsamba {
     if (this.isDev) {
       console.info(message);
     }
-  }
-
-  private async fetchJSON<T>(url: string, options?: RequestInit): Promise<T> {
-    const response: Response = await fetch(url, options);
-    const json: T = await response.json();
-    return json;
   }
 
   /**
@@ -80,15 +79,15 @@ export class Coinsamba {
     quote: string,
     exchangeId?: string
   ): Promise<Ticker[]> {
-    const searchParams = new URLSearchParams();
-    searchParams.append('base', base);
-    searchParams.append('quote', quote);
-    if (exchangeId) {
-      searchParams.append('exchangeId', exchangeId);
-    }
+    const params = {
+      base,
+      quote,
+      exchangeId,
+    };
 
-    const url = `${this.baseURL}/ticker?${searchParams.toString()}`;
-    const response = await this.fetchJSON<CoinsambaResponse<Ticker[]>>(url);
+    const response = await this.api
+      .get('/ticker', { searchParams: params })
+      .json<CoinsambaResponse<Ticker[]>>();
     this.logMessage(response.message);
     return response.response;
   }
@@ -100,12 +99,11 @@ export class Coinsamba {
    * @returns A Promise that resolves to an Index object.
    */
   async getIndex(base: string, quote: string): Promise<Index> {
-    const searchParams = new URLSearchParams();
-    searchParams.append('base', base);
-    searchParams.append('quote', quote);
-
-    const url = `${this.baseURL}/index?${searchParams.toString()}`;
-    const response = await this.fetchJSON<CoinsambaResponse<Index>>(url);
+    const response = await this.api
+      .get('/index', {
+        searchParams: { base, quote },
+      })
+      .json<CoinsambaResponse<Index>>();
     this.logMessage(response.message);
     return response.response;
   }
@@ -115,8 +113,9 @@ export class Coinsamba {
    * @returns A Promise that resolves to an array of exchange names.
    */
   async getExchanges(): Promise<string[]> {
-    const url = `${this.baseURL}/exchanges`;
-    const response = await this.fetchJSON<CoinsambaResponse<string[]>>(url);
+    const response = await this.api
+      .get('/exchanges')
+      .json<CoinsambaResponse<string[]>>();
     this.logMessage(response.message);
     return response.response;
   }
