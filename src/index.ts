@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import got, { Got } from 'got';
 
 /**
  * Represents ticker data for a cryptocurrency pair.
@@ -46,16 +46,17 @@ export interface CoinsambaOptions {
  * The Coinsamba API client.
  */
 export class Coinsamba {
-  private api: AxiosInstance;
   private isDev: boolean;
+  private api: Got;
 
   /**
    * Creates an instance of the Coinsamba API client.
    * @param options - Configuration options for the Coinsamba API instance.
    */
   constructor(options: CoinsambaOptions = {}) {
-    this.api = axios.create({
-      baseURL: 'https://api.coinsamba.com/v1'
+    this.api = got.extend({
+      prefixUrl: 'https://api.coinsamba.com/v1',
+      responseType: 'json',
     });
     this.isDev = options.isDev ?? false;
   }
@@ -73,18 +74,24 @@ export class Coinsamba {
    * @param exchangeId - (Optional) The ID of the exchange. If provided, it filters the results by exchange.
    * @returns A Promise that resolves to an array of Ticker objects.
    */
-  async getTicker(base: string, quote: string, exchangeId?: string): Promise<Ticker[]> {
+  async getTicker(
+    base: string,
+    quote: string,
+    exchangeId?: string
+  ): Promise<Ticker[]> {
     const params = {
       base,
       quote,
-      exchangeId
+      exchangeId,
     };
-  
-    const response = await this.api.get<CoinsambaResponse<Ticker[]>>('/ticker', { params });
-    this.logMessage(response.data.message);
-    return response.data.response;
+
+    const response = await this.api
+      .get('/ticker', { searchParams: params })
+      .json<CoinsambaResponse<Ticker[]>>();
+    this.logMessage(response.message);
+    return response.response;
   }
-  
+
   /**
    * Retrieves index data for the specified base and quote currency.
    * @param base - The base currency symbol.
@@ -92,14 +99,13 @@ export class Coinsamba {
    * @returns A Promise that resolves to an Index object.
    */
   async getIndex(base: string, quote: string): Promise<Index> {
-    const response = await this.api.get<CoinsambaResponse<Index>>('/index', {
-      params: {
-        base,
-        quote
-      }
-    });
-    this.logMessage(response.data.message);
-    return response.data.response;
+    const response = await this.api
+      .get('/index', {
+        searchParams: { base, quote },
+      })
+      .json<CoinsambaResponse<Index>>();
+    this.logMessage(response.message);
+    return response.response;
   }
 
   /**
@@ -107,8 +113,10 @@ export class Coinsamba {
    * @returns A Promise that resolves to an array of exchange names.
    */
   async getExchanges(): Promise<string[]> {
-    const response = await this.api.get<CoinsambaResponse<string[]>>('/exchanges');
-    this.logMessage(response.data.message);
-    return response.data.response;
+    const response = await this.api
+      .get('/exchanges')
+      .json<CoinsambaResponse<string[]>>();
+    this.logMessage(response.message);
+    return response.response;
   }
 }

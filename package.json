@@ -1,5 +1,4 @@
 {
-  "displayName": "@coinsamba/node-sdk",
   "homepage": "https://github.com/coinsambacom/node-sdk",
   "repository": {
     "type": "git",
@@ -37,8 +36,8 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "pkg",
-  "author": "Gustavo",
+  "name": "@coinsamba/node-sdk",
+  "author": "Gustavo <gustavo@obex.pw>",
   "module": "dist/pkg.esm.js",
   "size-limit": [
     {
@@ -52,11 +51,13 @@
   ],
   "devDependencies": {
     "@size-limit/preset-small-lib": "^8.2.6",
-    "@types/axios": "^0.14.0",
     "husky": "^8.0.3",
     "size-limit": "^8.2.6",
     "tsdx": "^0.14.1",
     "tslib": "^2.6.0",
     "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "got": "^12.0.0"
   }
 }
