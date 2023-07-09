@@ -4,7 +4,7 @@
     "type": "git",
     "url": "https://github.com/coinsambacom/node-sdk.git"
   },
-  "version": "0.2.1",
+  "version": "0.2.2",
   "license": "MIT",
   "private": false,
   "main": "dist/index.js",
