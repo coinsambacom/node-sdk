@@ -78,15 +78,15 @@ export class Coinsamba {
     quote: string,
     exchangeId?: string
   ): Promise<Ticker[]> {
-    const data = {
-      base,
-      quote,
-      exchangeId,
-    };
-
     const response = await this.api.get<CoinsambaResponse<Ticker[]>>(
       '/ticker',
-      { data }
+      {
+        params: {
+          base,
+          quote,
+          exchangeId,
+        }
+      }
     );
     this.logMessage(response.data.message);
     return response.data.response;
@@ -100,7 +100,7 @@ export class Coinsamba {
    */
   async getIndex(base: string, quote: string): Promise<Index> {
     const response = await this.api.get<CoinsambaResponse<Index>>('/index', {
-      data: { base, quote },
+      params: { base, quote },
     });
     this.logMessage(response.data.message);
     return response.data.response;
